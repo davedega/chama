@@ -31,6 +31,8 @@ public class ChamaActivity extends AppCompatActivity implements ChamaInterface {
     private TextView responseTimeTextView;
 
     private Button startBtn;
+    private Button parallelBtn;
+    private Button sequentlyBtn;
     private RecyclerView reposList;
     private ReposAdapter adapter;
 
