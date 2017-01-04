@@ -12,6 +12,7 @@ public interface ChamaPresenterInteractor {
 
     void fetchAtSameTime();
 
+//    this is the one that i can not manage to create
     void fetchOneAfterAnother();
 
 }

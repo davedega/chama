@@ -19,4 +19,6 @@ public interface ChamaInterface {
     void setResponseTime(String time);
 
     void onError(String error);
+
+    void resetScreen();
 }

@@ -73,6 +73,10 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ReposHolder>
         this.repos = repos;
         notifyDataSetChanged();
     }
+    public void clear(){
+        this.repos.clear();
+        notifyDataSetChanged();
+    }
 
     class ReposHolder extends RecyclerView.ViewHolder {
 

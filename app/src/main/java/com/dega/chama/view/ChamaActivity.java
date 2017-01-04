@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,16 +31,19 @@ public class ChamaActivity extends AppCompatActivity implements ChamaInterface {
     private TextView publicRepoCountTextView;
     private TextView responseTimeTextView;
 
-    private Button startBtn;
+    private LinearLayout reposLayout;
+    private LinearLayout buttonsLayout;
+
+    private Button clearBtn;
     private Button parallelBtn;
     private Button sequentlyBtn;
     private RecyclerView reposList;
+    private ProgressBar progressBar;
     private ReposAdapter adapter;
 
     private ChamaPresenterInteractor presenter;
 
 
-    private ProgressBar progressBar;
     private Retrofit retrofit;
 
     @Override
@@ -57,56 +61,28 @@ public class ChamaActivity extends AppCompatActivity implements ChamaInterface {
         nameTextView = (TextView) findViewById(R.id.name_textview);
         publicRepoCountTextView = (TextView) findViewById(R.id.public_repo_textview);
         responseTimeTextView = (TextView) findViewById(R.id.response_time_textview);
-        startBtn = (Button) findViewById(R.id.start_btn);
+        clearBtn = (Button) findViewById(R.id.clear_btn);
+        parallelBtn = (Button) findViewById(R.id.parallel_button);
+        sequentlyBtn = (Button) findViewById(R.id.sequently_button);
+        reposLayout = (LinearLayout) findViewById(R.id.repos_layout);
+        buttonsLayout = (LinearLayout) findViewById(R.id.buttons_layout);
+
         reposList = (RecyclerView) findViewById(R.id.recycler_view);
         reposList.setLayoutManager(new LinearLayoutManager(this));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        startBtn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-//                        presenter.fetchUser();
-//                        presenter.fetchRepos();
-                        presenter.fetchAtSameTime();
-                    }
+        clearBtn.setOnClickListener(
+                view -> {
+                    resetScreen();
                 }
         );
-//        jrxBtn.setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//
-//                        adapter = new ReposAdapter(ChamaActivity.this, ChamaData.fetchRepos());
-//                        reposList.setAdapter(adapter);
-//
-//                        Observable<User> fetchUser = Observable.create(new Observable.OnSubscribe<User>() {
-//                            @Override
-//                            public void call(Subscriber<? super User> subscriber) {
-//                                try {
-//                                    User data = ChamaData.fetchData();
-//                                    subscriber.onNext(data); // Emit the contents of the URL
-//                                    subscriber.onCompleted(); // Nothing more to emit
-//                                } catch (Exception e) {
-//                                    subscriber.onError(e); // In case there are network errors
-//                                }
-//                            }
-//                        });
-//
-//
-//                        fetchUser
-//                                .subscribeOn(Schedulers.newThread()) // Create a new Thread
-//                                .observeOn(AndroidSchedulers.mainThread()) // Use the UI thread
-//                                .subscribe(new Action1<User>() {
-//                                    @Override
-//                                    public void call(User user) {
-////                        pongo el nombre en el textView
-////                                        name.setText(user.getName());
-//                                    }
-//                                });
-//                    }
-//                }
-//        );
+        parallelBtn.setOnClickListener(view -> {
+            presenter.fetchAtSameTime();
+        });
+
+        sequentlyBtn.setOnClickListener(view -> {
+                        presenter.fetchUser();
+                        presenter.fetchRepos();
+        });
     }
 
     @Override
@@ -132,5 +108,13 @@ public class ChamaActivity extends AppCompatActivity implements ChamaInterface {
     @Override
     public void onError(String error) {
         Toast.makeText(getApplicationContext(), "Ups!" + error.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void resetScreen() {
+        adapter.clear();
+        nameTextView.setText("");
+        loginTextView.setText("");
+        publicRepoCountTextView.setText("");
     }
 }
